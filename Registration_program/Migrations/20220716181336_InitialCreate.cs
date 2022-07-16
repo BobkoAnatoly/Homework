@@ -30,7 +30,8 @@ namespace Registration_program.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     FirstName = table.Column<string>(type: "TEXT", nullable: false),
                     LastName = table.Column<string>(type: "TEXT", nullable: false),
-                    CompetitionId = table.Column<int>(type: "INTEGER", nullable: false)
+                    Age = table.Column<int>(type: "INTEGER", nullable: false),
+                    CompetitionId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -39,8 +40,7 @@ namespace Registration_program.Migrations
                         name: "FK_Members_Competitions_CompetitionId",
                         column: x => x.CompetitionId,
                         principalTable: "Competitions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(

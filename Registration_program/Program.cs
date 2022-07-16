@@ -9,10 +9,9 @@ namespace Registration_program
     {
         static void Main(string[] args)
         {
-            Competition competition = new Competition() { Name = "WRPF", Kind = CompetitionKind.Deadlift };
             CompetitionController competitionController = new CompetitionController();
             //competitionController.Add(competition);
-            competitionController.Delete(14);
+            Member member = new Member() { FirstName = "Димитрй", LastName = "Коршунов",Age = 12};
             competitionController.Show();
         }
     }

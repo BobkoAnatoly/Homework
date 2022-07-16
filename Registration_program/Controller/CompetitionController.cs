@@ -12,9 +12,9 @@ namespace Registration_program.Controller
     {
         private ApplicationDbContext _context = null!;
 
-        delegate void CompetitionHandler(string message);
-        private event CompetitionHandler? Deleted;
-        private event CompetitionHandler? Added;
+        delegate void ActiontionHandler(string message);
+        event ActiontionHandler? Deleted;
+        event ActiontionHandler? Added;
 
 
         public CompetitionController()
@@ -32,20 +32,20 @@ namespace Registration_program.Controller
             Console.WriteLine(message);
         }
 
-        public void Add<Competition>(Competition? competition)
+        public async Task Add<Competition>(Competition? competition)
         {
             if (competition != null)
             {
                 using (_context = new ApplicationDbContext())
                 {
                     _context.Entry(competition).State = EntityState.Added;
-                    _context.SaveChanges();
+                    await _context.SaveChangesAsync();
                     Added?.Invoke("Соревнование добавлено успешно.");
                 }
             }
         }
 
-        public void Add<Competition>(IEnumerable<Competition> competitions)
+        public async Task Add<Competition>(IEnumerable<Competition> competitions)
         {
             using (_context = new ApplicationDbContext())
             {
@@ -55,42 +55,42 @@ namespace Registration_program.Controller
                         _context.Entry(item).State = EntityState.Added;
                     continue;
                 }
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 Added?.Invoke("Соревнования добавлены успешно.");
                 Task.WaitAll();
             }
         }
 
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
             using (_context = new ApplicationDbContext())
             {
-                Competition competition =_context.Competitions.Find(id)!;
+                Competition? competition =await _context.Competitions.FindAsync(id);
                 if (competition != null)
                 {
                     _context.Entry(competition).State = EntityState.Deleted;
                     Deleted?.Invoke("Соревнование удалено");
                 }
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
-            return;
         }
 
-        public void Show()
+        public async Task Show()
         {
             using (_context = new ApplicationDbContext())
             {
-                foreach (var item in _context.Competitions.ToList())
+                int i = 1;
+                foreach (var item in await _context.Competitions.ToListAsync())
                 {
-                    Console.WriteLine($"{item.Id}. {item.Name} - {item.Kind}");
+                    Console.WriteLine($"{i++}.Id {item.Id}. {item.Name} - {item.Kind}");
                 }
             }
         }
-        public void ShowMenbers(int id)
+        public async void ShowMenbers(int id)
         {
             using (_context = new ApplicationDbContext())
             {
-                Competition competition = _context.Competitions.Find(id)!;
+                Competition? competition =await _context.Competitions.FindAsync(id);
                 if (competition != null && competition.Members != null)
                 {
                     foreach (var item in competition.Members)

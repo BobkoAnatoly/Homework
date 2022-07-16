@@ -14,7 +14,9 @@ namespace Registration_program.Models
 
         public string LastName { get; set; }
 
-        public virtual Competition Competition { get; set; }
+        public int Age { get; set; }
+
+        public virtual Competition? Competition { get; set; }
 
     }
 }

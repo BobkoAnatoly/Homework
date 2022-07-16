@@ -8,9 +8,7 @@ namespace Registration_program.Interfaces
 {
     public interface IController
     {
-        void Delete(int id);
-        void Add<TEntity>(TEntity entity);
-        void Show();
-
+        Task Delete(int id);
+        Task Add<TEntity>(TEntity entity);
     }
 }
