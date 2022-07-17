@@ -5,6 +5,7 @@ using System.Linq;
 using System;
 using System.Threading.Tasks;
 using Registration_program.Models;
+using System.Threading;
 
 namespace Registration_program.Controller
 {
@@ -75,8 +76,9 @@ namespace Registration_program.Controller
             }
         }
 
-        public async Task Show()
+        public async void Show()
         {
+            Thread.Sleep(200);
             using (_context = new ApplicationDbContext())
             {
                 int i = 1;
@@ -86,11 +88,12 @@ namespace Registration_program.Controller
                 }
             }
         }
-        public async void ShowMenbers(int id)
+        public void ShowMenbers(int id)
         {
+            Thread.Sleep(200);
             using (_context = new ApplicationDbContext())
             {
-                Competition? competition =await _context.Competitions.FindAsync(id);
+                Competition? competition = _context.Competitions.Find(id);
                 if (competition != null && competition.Members != null)
                 {
                     foreach (var item in competition.Members)

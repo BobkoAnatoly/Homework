@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Registration_program.Controller
@@ -19,15 +20,11 @@ namespace Registration_program.Controller
 
         public MemberController()
         {
-            Deleted += OnDelete;
-            Added += OnAdd;
+            Deleted += OnChange;
+            Added += OnChange;
         }
 
-        private void OnDelete(string message)
-        {
-            Console.WriteLine(message);
-        }
-        private void OnAdd(string message)
+        private void OnChange(string message)
         {
             Console.WriteLine(message);
         }
@@ -43,9 +40,10 @@ namespace Registration_program.Controller
                         member.Competition = competition;
                         await _context.Members.AddAsync(member);
                         await _context.SaveChangesAsync();
+                        Console.WriteLine("Участник зарегистрирован");
+                        Task.WaitAll();
                     }
                 } 
-
             }
         }
 
@@ -66,18 +64,19 @@ namespace Registration_program.Controller
         {
             using (_context = new ApplicationDbContext())
             {
-                Member competition =await _context.Members.FindAsync(id)!;
-                if (competition != null)
+                Member? member =await _context.Members.FindAsync(id);
+                if (member != null)
                 {
-                    _context.Entry(competition).State = EntityState.Deleted;
+                    _context.Entry(member).State = EntityState.Deleted;
                     Deleted?.Invoke("Участник удалён");
                 }
                 await _context.SaveChangesAsync();
             }
         }
 
-        public async Task Show(int CompetitionId)
+        public async void Show(int CompetitionId)
         {
+            Thread.Sleep(200);
             using (_context = new ApplicationDbContext())
             {
                  Competition? competition =await _context.Competitions.FindAsync(CompetitionId);

@@ -6,9 +6,15 @@ using System.Threading.Tasks;
 
 namespace Registration_program.Models
 {
+    public enum CompetitionKind
+    {
+        Deadlift,
+        Benchpress,
+        Squat
+    }
     public class Competition
     {
-
+        
         public int Id { get; set; }
 
         public string Name { get; set; }
